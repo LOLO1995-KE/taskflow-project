@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - Gestor de Tareas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <h1>📋 TaskFlow</h1>
+            <p>Gestiona tus tareas de forma eficiente</p>
+        </header>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="main-content">
+            <!-- BARRA LATERAL (ASIDE) -->
+            <aside class="sidebar">
+                <h3>Filtros</h3>
+                <ul class="filters">
+                    <li class="filter-item active">📌 Todas las tareas</li>
+                    <li class="filter-item">⭐ Importantes</li>
+                    <li class="filter-item">📅 Hoy</li>
+                    <li class="filter-item">✅ Completadas</li>
+                </ul>
+                
+                <h3>Categorías</h3>
+                <ul class="categories">
+                    <li class="category-item">💼 Trabajo</li>
+                    <li class="category-item">🏠 Personal</li>
+                    <li class="category-item">📚 Estudio</li>
+                    <li class="category-item">🛒 Compras</li>
+                </ul>
+            </aside>
+
+            <!-- SECCIÓN DE TAREAS -->
+            <section class="tasks-section">
+                <h2>Mis Tareas</h2>
+                
+                <div class="tasks-list">
+                    <!-- Tarea 1 -->
+                    <div class="task-card">
+                        <div class="task-info">
+                            <h4 class="task-title">Preparar presentación para el cliente</h4>
+                            <span class="task-category">💼 Trabajo</span>
+                        </div>
+                        <span class="priority-badge high">Alta</span>
+                    </div>
+
+                    <!-- Tarea 2 -->
+                    <div class="task-card">
+                        <div class="task-info">
+                            <h4 class="task-title">Comprar víveres para la semana</h4>
+                            <span class="task-category">🛒 Compras</span>
+                        </div>
+                        <span class="priority-badge medium">Media</span>
+                    </div>
+
+                    <!-- Tarea 3 -->
+                    <div class="task-card">
+                        <div class="task-info">
+                            <h4 class="task-title">Estudiar JavaScript avanzado</h4>
+                            <span class="task-category">📚 Estudio</span>
+                        </div>
+                        <span class="priority-badge high">Alta</span>
+                    </div>
+
+                    <!-- Tarea 4 -->
+                    <div class="task-card">
+                        <div class="task-info">
+                            <h4 class="task-title">Hacer ejercicio</h4>
+                            <span class="task-category">🏠 Personal</span>
+                        </div>
+                        <span class="priority-badge low">Baja</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
