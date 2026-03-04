@@ -35,49 +35,41 @@
                 </ul>
             </aside>
 
-            <!-- SECCIÓN DE TAREAS -->
-            <section class="tasks-section">
-                <h2>Mis Tareas</h2>
-                
-                <div class="tasks-list">
-                    <!-- Tarea 1 -->
-                    <div class="task-card">
-                        <div class="task-info">
-                            <h4 class="task-title">Preparar presentación para el cliente</h4>
-                            <span class="task-category">💼 Trabajo</span>
-                        </div>
-                        <span class="priority-badge high">Alta</span>
-                    </div>
-
-                    <!-- Tarea 2 -->
-                    <div class="task-card">
-                        <div class="task-info">
-                            <h4 class="task-title">Comprar víveres para la semana</h4>
-                            <span class="task-category">🛒 Compras</span>
-                        </div>
-                        <span class="priority-badge medium">Media</span>
-                    </div>
-
-                    <!-- Tarea 3 -->
-                    <div class="task-card">
-                        <div class="task-info">
-                            <h4 class="task-title">Estudiar JavaScript avanzado</h4>
-                            <span class="task-category">📚 Estudio</span>
-                        </div>
-                        <span class="priority-badge high">Alta</span>
-                    </div>
-
-                    <!-- Tarea 4 -->
-                    <div class="task-card">
-                        <div class="task-info">
-                            <h4 class="task-title">Hacer ejercicio</h4>
-                            <span class="task-category">🏠 Personal</span>
-                        </div>
-                        <span class="priority-badge low">Baja</span>
-                    </div>
+                   <!-- SECCIÓN DE TAREAS -->
+        <section class="tasks-section">
+            <h2>Mis Tareas</h2>
+            
+            <!-- FORMULARIO PARA AÑADIR TAREAS -->
+            <form id="task-form" class="task-form">
+                <div class="form-group">
+                    <input 
+                        type="text" 
+                        id="task-input" 
+                        placeholder="Escribe una nueva tarea..." 
+                        required
+                    >
+                    <select id="category-select">
+                        <option value="💼 Trabajo">💼 Trabajo</option>
+                        <option value="🏠 Personal">🏠 Personal</option>
+                        <option value="📚 Estudio">📚 Estudio</option>
+                        <option value="🛒 Compras">🛒 Compras</option>
+                    </select>
+                    <select id="priority-select">
+                        <option value="high">Alta</option>
+                        <option value="medium">Media</option>
+                        <option value="low">Baja</option>
+                    </select>
+                    <button type="submit" class="btn-primary">➕ Añadir</button>
                 </div>
-            </section>
+            </form>
+
+            <!-- LISTA DE TAREAS (AHORA VACÍA) -->
+            <div id="tasks-list" class="tasks-list">
+                <!-- Las tareas se insertarán aquí con JavaScript -->
+            </div>
+        </section>
         </main>
     </div>
+        <script src="app.js"></script>
 </body>
 </html>

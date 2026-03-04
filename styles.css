@@ -229,4 +229,96 @@ body {
         margin-left: 0;
         align-self: flex-start;
     }
+}/* ============================================
+   NUEVOS ESTILOS PARA EL FORMULARIO Y BOTONES
+   ============================================ */
+
+/* FORMULARIO DE TAREAS */
+.task-form {
+    margin-bottom: var(--spacing-xl);
+    background-color: var(--card-background);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.form-group {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+#task-input {
+    flex: 2;
+    min-width: 200px;
+    padding: var(--spacing-sm);
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius);
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+#category-select, #priority-select {
+    flex: 1;
+    min-width: 120px;
+    padding: var(--spacing-sm);
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius);
+    font-family: inherit;
+    background-color: white;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color var(--transition-speed) ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+}
+
+/* BOTÓN DE ELIMINAR */
+.delete-btn {
+    background-color: transparent;
+    color: var(--priority-high);
+    border: 1px solid var(--priority-high);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all var(--transition-speed) ease;
+    margin-left: var(--spacing-sm);
+}
+
+.delete-btn:hover {
+    background-color: var(--priority-high);
+    color: white;
+}
+
+/* FILTRO DE BÚSQUEDA (BONUS) */
+.search-box {
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-sm);
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius);
+    width: 100%;
+    font-family: inherit;
+}
+
+/* ACTUALIZAR MEDIA QUERY PARA MÓVIL */
+@media screen and (max-width: 768px) {
+    .form-group {
+        flex-direction: column;
+    }
+    
+    #task-input, #category-select, #priority-select, .btn-primary {
+        width: 100%;
+    }
 }
