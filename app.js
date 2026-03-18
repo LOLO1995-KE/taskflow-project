@@ -13,6 +13,7 @@ const tasksContainer = document.getElementById('tasks-list');
 let tasks = [];
 let selectedCategory = null;      // Para filtro de categoría
 let currentFilter = 'all';         // Para filtros principales: 'all', 'favorites', 'today'
+let statusFilter = 'all';          // NUEVO: 'all', 'pending', 'completed'
 
 // 3. CARGAR TAREAS DE LocalStorage
 function loadTasksFromStorage() {
@@ -25,7 +26,7 @@ function saveTasksToStorage() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
-// 5. RENDERIZAR TAREAS (VERSIÓN MEJORADA)
+// 5. RENDERIZAR TAREAS (VERSIÓN CORREGIDA)
 function renderTasks() {
     tasksContainer.innerHTML = '';
     
@@ -35,6 +36,7 @@ function renderTasks() {
     });
     
     addDeleteListeners();
+    addEditListeners();
 }
 
 // 6. CREAR TARJETA DE TAREA (FUNCIÓN AUXILIAR)
@@ -43,16 +45,44 @@ function createTaskCard(task) {
     taskCard.className = 'task-card';
     taskCard.dataset.id = task.id;
     
+    // Asegurar que la tarea tiene la propiedad completed
+    if (task.completed === undefined) {
+        task.completed = false;
+    }
+    
     taskCard.innerHTML = `
-        <div class="task-info">
-            <h4 class="task-title">${task.text}</h4>
-            <span class="task-category">${task.category}</span>
-        </div>
-        <div style="display: flex; align-items: center; gap: 8px;">
-            <span class="priority-badge ${task.priority}">
-                ${task.priority === 'high' ? 'Alta' : task.priority === 'medium' ? 'Media' : 'Baja'}
-            </span>
-            <button class="delete-btn" data-id="${task.id}">✕ Eliminar</button>
+        <div style="display: flex; align-items: center; gap: 15px; width: 100%; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+                <input 
+                    type="checkbox" 
+                    class="task-checkbox" 
+                    data-id="${task.id}" 
+                    ${task.completed ? 'checked' : ''}
+                    style="width: 20px; height: 20px; cursor: pointer;"
+                >
+                <div>
+                    <h4 class="task-title" style="margin: 0 0 5px 0; ${task.completed ? 'text-decoration: line-through; opacity: 0.7;' : ''}">
+                        ${task.text}
+                    </h4>
+                    <span class="task-category" style="font-size: 0.8rem; background: #e9ecef; padding: 3px 8px; border-radius: 12px;">
+                        ${task.category}
+                    </span>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="priority-badge" style="padding: 4px 12px; border-radius: 16px; font-size: 0.75rem; font-weight: bold; color: white; background-color: ${
+                    task.priority === 'high' ? '#A1355B' : task.priority === 'medium' ? '#B58B7C' : '#7C9EB2'
+                };">
+                    ${task.priority === 'high' ? 'Alta' : task.priority === 'medium' ? 'Media' : 'Baja'}
+                </span>
+                <!-- 👇 BOTÓN DE EDITAR -->
+                <button class="edit-btn" data-id="${task.id}" style="background: transparent; border: 1px solid #408EC6; color: #408EC6; padding: 4px 10px; border-radius: 6px; cursor: pointer; margin-right: 5px;">
+                    ✏️ Editar
+                </button>
+                <button class="delete-btn" data-id="${task.id}" style="background: transparent; border: 1px solid #A1355B; color: #A1355B; padding: 4px 10px; border-radius: 6px; cursor: pointer;">
+                    ✕ Eliminar
+                </button>
+            </div>
         </div>
     `;
     
@@ -77,6 +107,7 @@ function addTask(event) {
         text: taskText,
         category: category,
         priority: priority,
+        completed: false,
         favorite: false,      // Para futura funcionalidad
         createdAt: new Date().toISOString()
     };
@@ -99,6 +130,67 @@ function deleteTask(taskId) {
     applyAllFilters();
 }
 
+// 8.5 EDITAR TAREA
+function editTask(taskId) {
+    // Buscar la tarea por su ID
+    const task = tasks.find(t => t.id === taskId);
+    
+    if (!task) return;
+    
+    // Preguntar nuevo título con un prompt
+    const newText = prompt('Editar tarea:', task.text);
+    
+    // Si el usuario no canceló y escribió algo
+    if (newText !== null && newText.trim() !== '') {
+        // Actualizar el texto de la tarea
+        task.text = newText.trim();
+        
+        // Guardar en localStorage
+        saveTasksToStorage();
+        
+        // Volver a renderizar
+        applyAllFilters();
+    }
+}
+
+// 8.6 MARCAR TODAS LAS TAREAS COMO COMPLETADAS
+function markAllAsCompleted() {
+    if (tasks.length === 0) {
+        alert('No hay tareas para marcar');
+        return;
+    }
+    
+    // Verificar si todas están completadas
+    const allCompleted = tasks.every(task => task.completed);
+    
+    // Si todas están completadas, las desmarcamos. Si no, las marcamos todas
+    tasks.forEach(task => {
+        task.completed = !allCompleted;
+    });
+    
+    saveTasksToStorage();
+    applyAllFilters();
+}
+// 8.7 BORRAR TAREAS COMPLETADAS
+function clearCompletedTasks() {
+    console.log('Botón borrar clickeado'); // Para depurar
+    
+    const completedCount = tasks.filter(task => task.completed).length;
+    console.log('Tareas completadas:', completedCount);
+    
+    if (completedCount === 0) {
+        alert('No hay tareas completadas para borrar');
+        return;
+    }
+    
+    if (confirm(`¿Borrar ${completedCount} tarea(s) completada(s)?`)) {
+        tasks = tasks.filter(task => !task.completed);
+        saveTasksToStorage();
+        applyAllFilters();
+        console.log('Tareas borradas, restantes:', tasks.length);
+    }
+}
+
 // 9. AÑADIR LISTENERS A BOTONES DE ELIMINAR
 function addDeleteListeners() {
     const deleteButtons = document.querySelectorAll('.delete-btn');
@@ -107,6 +199,18 @@ function addDeleteListeners() {
             e.stopPropagation();
             const taskId = e.target.dataset.id;
             deleteTask(taskId);
+        });
+    });
+}
+
+// 9.5 AÑADIR LISTENERS A BOTONES DE EDITAR
+function addEditListeners() {
+    const editButtons = document.querySelectorAll('.edit-btn');
+    editButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const taskId = button.dataset.id;
+            editTask(taskId);
         });
     });
 }
@@ -172,6 +276,33 @@ function setupMainFilters() {
     });
 }
 
+// 11.5 CONFIGURAR FILTROS DE ESTADO (TODAS/PENDIENTES/COMPLETADAS)
+function setupStatusFilters() {
+    // Seleccionar todos los botones de estado
+    const statusButtons = document.querySelectorAll('.status-filter');
+    
+    // Añadir evento click a cada botón
+    statusButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Quitar clase active de todos los botones
+            statusButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Añadir clase active al botón clickeado
+            button.classList.add('active');
+            
+            // Actualizar la variable statusFilter con el valor del data-status
+            statusFilter = button.dataset.status;
+            
+            // Aplicar todos los filtros para actualizar la vista
+            applyAllFilters();
+            
+            console.log('Filtro cambiado a:', statusFilter); // Para verificar
+        });
+    });
+}
+
 // ============================================
 // FILTRO DE BÚSQUEDA
 // ============================================
@@ -186,7 +317,7 @@ function setupSearchFilter() {
     searchBox.placeholder = '🔍 Buscar tareas...';
     searchBox.className = 'search-box';
     
-    tasksContainer.parentNode.insertBefore(searchBox, tasksContainer);
+    document.querySelector('.tasks-section').insertBefore(searchBox, tasksContainer);
     
     searchBox.addEventListener('input', () => {
         applyAllFilters();
@@ -200,7 +331,7 @@ function setupSearchFilter() {
 // 13. APLICAR TODOS LOS FILTROS
 function applyAllFilters() {
     let tasksToShow = [...tasks];
-    
+
     // 1. Filtrar por filtro principal (Todas, Importantes, Hoy)
     switch(currentFilter) {
         case 'favorites':
@@ -224,12 +355,19 @@ function applyAllFilters() {
         tasksToShow = tasksToShow.filter(task => task.category === selectedCategory);
     }
     
-    // 3. Filtrar por búsqueda
+    // 3. Filtrar por estado (pendientes/completadas)
+    if (statusFilter === 'pending') {
+        tasksToShow = tasksToShow.filter(task => !task.completed);
+    } else if (statusFilter === 'completed') {
+        tasksToShow = tasksToShow.filter(task => task.completed);
+    }
+    
+    // 4. Filtrar por búsqueda
     const searchBox = document.querySelector('.search-box');
     if (searchBox && searchBox.value) {
         const searchTerm = searchBox.value.toLowerCase();
         tasksToShow = tasksToShow.filter(task => 
-            task.text.toLowerCase().includes(searchTerm) ||
+            task.text.toLowerCase().includes(searchTerm) || 
             task.category.toLowerCase().includes(searchTerm)
         );
     }
@@ -261,6 +399,7 @@ function renderFilteredTasks(tasksToRender) {
     });
     
     addDeleteListeners();
+    addEditListeners(); // NUEVA LÍNEA DE EDITAR LA TAREA
 }
 
 // 15. RESETEAR FILTROS
@@ -294,7 +433,19 @@ function init() {
     if (taskForm) taskForm.addEventListener('submit', addTask);
     setupMainFilters();       // Filtros: Todas, Importantes, Hoy
     setupCategoryFilters();   // Filtros: Trabajo, Personal, etc.
+    setupStatusFilters();     // NUEVO: Filtros: Todas, Pendientes, Completada
     setupSearchFilter();      // Búsqueda
+    
+      // Conectar botón marcar todas
+    const markAllBtn = document.getElementById('mark-all-btn');
+    if (markAllBtn) {
+        markAllBtn.addEventListener('click', markAllAsCompleted);
+    }
+      // 👇 AÑADE ESTAS LÍNEAS PARA CONECTAR BORRAR COMPLETADAS
+    const clearCompletedBtn = document.getElementById('clear-completed-btn');
+    if (clearCompletedBtn) {
+        clearCompletedBtn.addEventListener('click', clearCompletedTasks);
+    }
 }
 
 // 17. ESPERAR A QUE EL DOM ESTÉ LISTO
@@ -302,4 +453,13 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {
     init(); // DOM ya está cargado
+    // Función para marcar/desmarcar tarea completada
+function toggleTaskCompletion(taskId) {
+    const task = tasks.find(t => t.id === taskId);
+    if (task) {
+        task.completed = !task.completed;
+        saveTasksToStorage();
+        applyAllFilters();
+    }
+}
 }

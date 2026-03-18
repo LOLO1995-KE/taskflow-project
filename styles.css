@@ -322,3 +322,86 @@ body {
         width: 100%;
     }
 }
+
+/* ESTILOS PARA FILTROS DE ESTADO */
+.status-filters {
+    list-style: none;
+    margin-bottom: var(--spacing-xl);
+}
+
+.status-filter {
+    display: block;
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin-bottom: var(--spacing-xs);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1rem;
+    text-align: left;
+    background-color: transparent;
+    color: var(--text-primary);
+    transition: background-color var(--transition-speed) ease;
+}
+
+.status-filter:hover {
+    background-color: rgba(67, 97, 238, 0.1);
+}
+
+.status-filter.active {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 500;
+}
+
+/* Para modo oscuro si lo tienes */
+body.dark-mode .status-filter {
+    color: var(--text-primary);
+}
+
+body.dark-mode .status-filter:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .status-filter.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Botones extra */
+.extra-buttons {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid #dee2e6;
+}
+
+.extra-btn {
+    display: block;
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin-bottom: var(--spacing-xs);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1rem;
+    text-align: left;
+    background-color: transparent;
+    color: var(--text-primary);
+    transition: background-color var(--transition-speed) ease;
+}
+
+.extra-btn:hover {
+    background-color: rgba(67, 97, 238, 0.1);
+}
+
+.extra-btn:active {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 500;
+}
+
+.extra-btn:last-child {
+    margin-bottom: 0;
+}

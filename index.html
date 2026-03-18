@@ -20,56 +20,66 @@
             <aside class="sidebar">
                 <h3>Filtros</h3>
                 <ul class="filters">
-                    <li class="filter-item active">📌 Todas las tareas</li>
-                    <li class="filter-item">⭐ Importantes</li>
-                    <li class="filter-item">📅 Hoy</li>
-                    <li class="filter-item">✅ Completadas</li>
+                    <!-- Filtros principales (sin Todas, porque ya está en estado) -->
+                    <li class="filter-item" data-filter="favorites">⭐ Importantes</li>
+                    <li class="filter-item" data-filter="today">📅 Hoy</li>
+                    
+                    <!-- Filtros de estado (Todas, Pendientes, Completadas) -->
+                    <li class="filter-item status-option active" data-status="all">📋 Todas</li>
+                    <li class="filter-item status-option" data-status="pending">⏳ Pendientes</li>
+                    <li class="filter-item status-option" data-status="completed">✅ Completadas</li>
                 </ul>
                 
-                <h3>Categorías</h3>
-                <ul class="categories">
-                    <li class="category-item">💼 Trabajo</li>
-                    <li class="category-item">🏠 Personal</li>
-                    <li class="category-item">📚 Estudio</li>
-                    <li class="category-item">🛒 Compras</li>
-                </ul>
-            </aside>
+                   <h3>Categorías</h3>
+    <ul class="categories">
+        <li class="category-item" data-category="Trabajo">💼 Trabajo</li>
+        <li class="category-item" data-category="Personal">🏠 Personal</li>
+        <li class="category-item" data-category="Estudio">📚 Estudio</li>
+        <li class="category-item" data-category="Compras">🛒 Compras</li>
+    </ul>
+    
+    <!-- Botones extra -->
+    <div class="extra-buttons">
+        <button id="mark-all-btn" class="extra-btn">✅ Marcar todas como completadas</button>
+        <button id="clear-completed-btn" class="extra-btn">🗑️ Borrar completadas</button>
+    </div>
+</aside>
 
-                   <!-- SECCIÓN DE TAREAS -->
-        <section class="tasks-section">
-            <h2>Mis Tareas</h2>
-            
-            <!-- FORMULARIO PARA AÑADIR TAREAS -->
-            <form id="task-form" class="task-form">
-                <div class="form-group">
-                    <input 
-                        type="text" 
-                        id="task-input" 
-                        placeholder="Escribe una nueva tarea..." 
-                        required
-                    >
-                    <select id="category-select">
-                        <option value="💼 Trabajo">💼 Trabajo</option>
-                        <option value="🏠 Personal">🏠 Personal</option>
-                        <option value="📚 Estudio">📚 Estudio</option>
-                        <option value="🛒 Compras">🛒 Compras</option>
-                    </select>
-                    <select id="priority-select">
-                        <option value="high">Alta</option>
-                        <option value="medium">Media</option>
-                        <option value="low">Baja</option>
-                    </select>
-                    <button type="submit" class="btn-primary">➕ Añadir</button>
+            <!-- SECCIÓN DE TAREAS -->
+            <section class="tasks-section">
+                <h2>Mis Tareas</h2>
+                
+                <!-- FORMULARIO PARA AÑADIR TAREAS -->
+                <form id="task-form" class="task-form">
+                    <div class="form-group">
+                        <input 
+                            type="text" 
+                            id="task-input" 
+                            placeholder="Escribe una nueva tarea..." 
+                            required
+                        >
+                        <select id="category-select">
+                            <option value="💼 Trabajo">💼 Trabajo</option>
+                            <option value="🏠 Personal">🏠 Personal</option>
+                            <option value="📚 Estudio">📚 Estudio</option>
+                            <option value="🛒 Compras">🛒 Compras</option>
+                        </select>
+                        <select id="priority-select">
+                            <option value="high">Alta</option>
+                            <option value="medium">Media</option>
+                            <option value="low">Baja</option>
+                        </select>
+                        <button type="submit" class="btn-primary">➕ Añadir</button>
+                    </div>
+                </form>
+
+                <!-- LISTA DE TAREAS -->
+                <div id="tasks-list" class="tasks-list">
+                    <!-- Las tareas se insertarán aquí con JavaScript -->
                 </div>
-            </form>
-
-            <!-- LISTA DE TAREAS (AHORA VACÍA) -->
-            <div id="tasks-list" class="tasks-list">
-                <!-- Las tareas se insertarán aquí con JavaScript -->
-            </div>
-        </section>
+            </section>
         </main>
     </div>
-        <script src="app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
