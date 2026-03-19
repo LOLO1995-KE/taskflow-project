@@ -26,32 +26,31 @@
             <aside class="sidebar">
                 <h3>Filtros</h3>
                 <ul class="filters">
-                    <!-- Filtros principales (sin Todas, porque ya está en estado) -->
+                    <!-- Filtros principales -->
                     <li class="filter-item" data-filter="favorites">⭐ Importantes</li>
                     <li class="filter-item" data-filter="today">📅 Hoy</li>
                     
-                    <!-- Filtros de estado (Todas, Pendientes, Completadas) -->
+                    <!-- Filtros de estado -->
                     <li class="filter-item status-option active" data-status="all">📋 Todas</li>
                     <li class="filter-item status-option" data-status="pending">⏳ Pendientes</li>
                     <li class="filter-item status-option" data-status="completed">✅ Completadas</li>
                 </ul>
                 
-                   <h3>Categorías</h3>
-    <ul class="categories">
-        <li class="category-item" data-category="Trabajo">💼 Trabajo</li>
-        <li class="category-item" data-category="Personal">🏠 Personal</li>
-        <li class="category-item" data-category="Estudio">📚 Estudio</li>
-        <li class="category-item" data-category="Compras">🛒 Compras</li>
-    </ul>
-    
-    <!-- Botones extra -->
-    <div class="extra-buttons">
-        <button id="mark-all-btn" class="extra-btn">✅ Marcar todas como completadas</button>
-        <button id="clear-completed-btn" class="extra-btn">🗑️ Borrar completadas</button>
-        <div class="extra-buttons">
-        <button id="dark-mode-toggle" class="extra-btn">🌙 Modo oscuro</button>
-    </div>
-</aside>
+                <h3>Categorías</h3>
+                <ul class="categories">
+                    <li class="category-item" data-category="Trabajo">💼 Trabajo</li>
+                    <li class="category-item" data-category="Personal">🏠 Personal</li>
+                    <li class="category-item" data-category="Estudio">📚 Estudio</li>
+                    <li class="category-item" data-category="Compras">🛒 Compras</li>
+                </ul>
+                
+                <!-- Botones extra -->
+                <div class="extra-buttons">
+                    <button id="mark-all-btn" class="extra-btn">✅ Marcar todas como completadas</button>
+                    <button id="clear-completed-btn" class="extra-btn">🗑️ Borrar completadas</button>
+                    <button id="dark-mode-toggle" class="extra-btn">🌙 Modo oscuro</button>
+                </div>
+            </aside>
 
             <!-- SECCIÓN DE TAREAS -->
             <section class="tasks-section">
@@ -67,10 +66,10 @@
                             required
                         >
                         <select id="category-select">
-                            <option value="💼 Trabajo">💼 Trabajo</option>
-                            <option value="🏠 Personal">🏠 Personal</option>
-                            <option value="📚 Estudio">📚 Estudio</option>
-                            <option value="🛒 Compras">🛒 Compras</option>
+                            <option value="Trabajo">💼 Trabajo</option>
+                            <option value="Personal">🏠 Personal</option>
+                            <option value="Estudio">📚 Estudio</option>
+                            <option value="Compras">🛒 Compras</option>
                         </select>
                         <select id="priority-select">
                             <option value="high">Alta</option>

@@ -24,6 +24,7 @@
     --priority-low: #7C9EB2;
     
     /* Espaciados */
+    --spacing-xs: 0.25rem;
     --spacing-sm: 0.5rem;
     --spacing-md: 1rem;
     --spacing-lg: 1.5rem;
@@ -50,16 +51,25 @@ body {
     background-color: var(--background-color);
     color: var(--text-primary);
     line-height: 1.6;
-    padding: var(--spacing-md);
+    padding: 0;
+    width: 100%;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
+    width: 100%;
     margin: 0 auto;
     background-color: white;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     overflow: hidden;
+}
+
+/* Para pantallas muy grandes */
+@media screen and (min-width: 1600px) {
+    .container {
+        max-width: 1600px;
+    }
 }
 
 /* HEADER */
@@ -131,7 +141,7 @@ body {
     color: var(--text-primary);
 }
 
-/* LISTA DE TAREAS (FLEXBOX) */
+/* LISTA DE TAREAS */
 .tasks-list {
     display: flex;
     flex-direction: column;
@@ -199,41 +209,10 @@ body {
     background-color: var(--priority-low);
 }
 
-/* MEDIA QUERIES - MÓVIL */
-@media screen and (max-width: 768px) {
-    body {
-        padding: var(--spacing-xs);
-    }
-    
-    .main-content {
-        flex-direction: column;
-    }
-    
-    .sidebar {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid #dee2e6;
-    }
-    
-    .tasks-section {
-        padding: var(--spacing-md);
-    }
-    
-    .task-card {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--spacing-sm);
-    }
-    
-    .priority-badge {
-        margin-left: 0;
-        align-self: flex-start;
-    }
-}/* ============================================
-   NUEVOS ESTILOS PARA EL FORMULARIO Y BOTONES
+/* ============================================
+   FORMULARIO Y BOTONES
    ============================================ */
 
-/* FORMULARIO DE TAREAS */
 .task-form {
     margin-bottom: var(--spacing-xl);
     background-color: var(--card-background);
@@ -284,7 +263,6 @@ body {
     background-color: var(--secondary-color);
 }
 
-/* BOTÓN DE ELIMINAR */
 .delete-btn {
     background-color: transparent;
     color: var(--priority-high);
@@ -302,7 +280,6 @@ body {
     color: white;
 }
 
-/* FILTRO DE BÚSQUEDA (BONUS) */
 .search-box {
     margin-bottom: var(--spacing-md);
     padding: var(--spacing-sm);
@@ -312,18 +289,7 @@ body {
     font-family: inherit;
 }
 
-/* ACTUALIZAR MEDIA QUERY PARA MÓVIL */
-@media screen and (max-width: 768px) {
-    .form-group {
-        flex-direction: column;
-    }
-    
-    #task-input, #category-select, #priority-select, .btn-primary {
-        width: 100%;
-    }
-}
-
-/* ESTILOS PARA FILTROS DE ESTADO */
+/* FILTROS DE ESTADO */
 .status-filters {
     list-style: none;
     margin-bottom: var(--spacing-xl);
@@ -355,21 +321,7 @@ body {
     font-weight: 500;
 }
 
-/* Para modo oscuro si lo tienes */
-body.dark-mode .status-filter {
-    color: var(--text-primary);
-}
-
-body.dark-mode .status-filter:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-body.dark-mode .status-filter.active {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-/* Botones extra */
+/* BOTONES EXTRA */
 .extra-buttons {
     margin-top: var(--spacing-lg);
     padding-top: var(--spacing-lg);
@@ -405,84 +357,160 @@ body.dark-mode .status-filter.active {
 .extra-btn:last-child {
     margin-bottom: 0;
 }
+
 /* ============================================
-   MODO OSCURO - ESTILOS
+   MODO OSCURO
    ============================================ */
 
-/* Cuando el HTML tiene la clase dark */
-html.dark body {
+body.dark-mode {
     background-color: #1a1a1a;
 }
 
-html.dark .container {
+body.dark-mode .container {
     background-color: #2d2d2d;
 }
 
-html.dark .header {
+body.dark-mode .header {
     background-color: #2a2a2a;
 }
 
-html.dark .sidebar {
+body.dark-mode .sidebar {
     background-color: #333333;
     border-right-color: #404040;
 }
 
-html.dark .filter-item,
-html.dark .category-item {
+body.dark-mode .filter-item,
+body.dark-mode .category-item {
     color: #e0e0e0;
 }
 
-html.dark .filter-item:hover,
-html.dark .category-item:hover {
+body.dark-mode .filter-item:hover,
+body.dark-mode .category-item:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-html.dark .filter-item.active {
+body.dark-mode .filter-item.active {
     background-color: var(--royal-blue);
     color: white;
 }
 
-html.dark .tasks-section {
+body.dark-mode .tasks-section {
     background-color: #2d2d2d;
 }
 
-html.dark .task-card {
+body.dark-mode .task-card {
     background-color: #3d3d3d;
     border-color: #404040;
 }
 
-html.dark .task-title {
+body.dark-mode .task-title {
     color: #ffffff;
 }
 
-html.dark .task-category {
+body.dark-mode .task-category {
     background-color: #404040;
     color: #cccccc;
 }
 
-html.dark .search-box {
+body.dark-mode .search-box {
     background-color: #3d3d3d;
     border-color: #404040;
     color: #ffffff;
 }
 
-html.dark .extra-btn {
+body.dark-mode .extra-btn {
     color: #e0e0e0;
 }
 
-html.dark .extra-btn:hover {
+body.dark-mode .extra-btn:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-html.dark .extra-btn:active {
+body.dark-mode .extra-btn:active {
     background-color: var(--royal-blue);
     color: white;
 }
-/* ============================================
-   PRUEBA MODO OSCURO
-   ============================================ */
 
-/* PRUEBA - Cambiar fondo a rojo cuando dark está activado */
-html.dark body {
-    background-color: red !important;
+body.dark-mode .btn-primary {
+    background-color: #408EC6;
+}
+
+body.dark-mode .btn-primary:hover {
+    background-color: #1E2761;
+}
+
+body.dark-mode .task-form {
+    background-color: #2d2d2d;
+}
+
+body.dark-mode #task-input {
+    background-color: #4a4a4a;
+    border-color: #5a5a5a;
+    color: #ffffff;
+}
+
+body.dark-mode #task-input::placeholder {
+    color: #b0b0b0;
+}
+
+body.dark-mode #category-select,
+body.dark-mode #priority-select {
+    background-color: #4a4a4a;
+    border-color: #5a5a5a;
+    color: #ffffff;
+}
+
+body.dark-mode #category-select option,
+body.dark-mode #priority-select option {
+    background-color: #4a4a4a;
+    color: #ffffff;
+}
+
+/* Ajustar cápsulas de categoría en modo oscuro */
+body.dark-mode .task-category {
+    background-color: #555555 !important;  /* Fondo más oscuro */
+    color: #e0e0e0 !important;             /* Texto gris claro */
+}
+
+/* Categorías en la barra lateral (Trabajo, Personal, etc) */
+body.dark-mode .category-item {
+    color: #ffffff !important;
+}
+
+/* ============================================
+   MEDIA QUERY MÓVIL
+   ============================================ */
+@media screen and (max-width: 768px) {
+    .main-content {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .tasks-section {
+        padding: var(--spacing-md);
+    }
+    
+    .task-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+    
+    .priority-badge {
+        margin-left: 0;
+        align-self: flex-start;
+    }
+    
+    .form-group {
+        flex-direction: column;
+    }
+    
+    #task-input, #category-select, #priority-select, .btn-primary {
+        width: 100%;
+    }
 }

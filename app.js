@@ -75,7 +75,7 @@ function createTaskCard(task) {
                 };">
                     ${task.priority === 'high' ? 'Alta' : task.priority === 'medium' ? 'Media' : 'Baja'}
                 </span>
-                <!-- 👇 BOTÓN COMPLETADA AÑADIDO -->
+                <!-- ← AÑADIDO: Botón Completada -->
                 <button class="complete-btn" data-id="${task.id}" style="background: transparent; border: 1px solid #27ae60; color: #27ae60; padding: 4px 10px; border-radius: 6px; cursor: pointer; margin-right: 5px;">
                     ✅ Completada
                 </button>
@@ -89,8 +89,6 @@ function createTaskCard(task) {
         </div>
     `;
     
-
-    
     // Event listener para el checkbox
     const checkbox = taskCard.querySelector('.task-checkbox');
     if (checkbox) {
@@ -101,6 +99,7 @@ function createTaskCard(task) {
         });
     }
     
+    return taskCard;
 }
 
 // 7. AÑADIR NUEVA TAREA
@@ -177,6 +176,16 @@ function toggleTaskCompletion(taskId) {
     }
 }
 
+// ← AÑADIDO: Función para marcar tarea como completada con el botón verde
+function completeTask(taskId) {
+    const task = tasks.find(t => t.id === taskId);
+    if (task) {
+        task.completed = true;
+        saveTasksToStorage();
+        applyAllFilters();
+    }
+}
+
 // 8.7 MARCAR TODAS LAS TAREAS COMO COMPLETADAS
 function markAllAsCompleted() {
     if (tasks.length === 0) {
@@ -236,6 +245,18 @@ function addEditListeners() {
             e.stopPropagation();
             const taskId = button.dataset.id;
             editTask(taskId);
+        });
+    });
+}
+
+// ← AÑADIDO: Listeners para botones de completada
+function addCompleteListeners() {
+    const completeButtons = document.querySelectorAll('.complete-btn');
+    completeButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const taskId = button.dataset.id;
+            completeTask(taskId);
         });
     });
 }
@@ -382,7 +403,7 @@ function setupSearchFilter() {
 function applyAllFilters() {
     let tasksToShow = [...tasks];
 
-    // 1. Filtrar por filtro principal (Todas, Importantes, Hoy)
+    // 1. Filtrar por filtro principal (Importantes, Hoy)
     switch(currentFilter) {
         case 'favorites':
             tasksToShow = tasksToShow.filter(task => task.favorite);
@@ -393,9 +414,6 @@ function applyAllFilters() {
                 return task.createdAt && new Date(task.createdAt).toDateString() === today;
             });
             break;
-        case 'completed':
-            // Por implementar
-            break;
         default: // 'all' - no filtrar
             break;
     }
@@ -405,12 +423,13 @@ function applyAllFilters() {
         tasksToShow = tasksToShow.filter(task => task.category === selectedCategory);
     }
     
-    // 3. Filtrar por estado (pendientes/completadas)
+    // 3. Filtrar por estado (Todas/Pendientes/Completadas)
     if (statusFilter === 'pending') {
         tasksToShow = tasksToShow.filter(task => !task.completed);
     } else if (statusFilter === 'completed') {
         tasksToShow = tasksToShow.filter(task => task.completed);
     }
+    // Si statusFilter es 'all', no filtramos por estado
     
     // 4. Filtrar por búsqueda
     const searchBox = document.querySelector('.search-box');
@@ -449,7 +468,8 @@ function renderFilteredTasks(tasksToRender) {
     });
     
     addDeleteListeners();
-    addEditListeners(); // NUEVA LÍNEA DE EDITAR LA TAREA
+    addEditListeners();
+    addCompleteListeners(); // ← AÑADIDO: Listeners para botones completada
 }
 
 // 15. RESETEAR FILTROS
@@ -529,13 +549,4 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {
     init(); // DOM ya está cargado
-    // Función para marcar/desmarcar tarea completada
-function toggleTaskCompletion(taskId) {
-    const task = tasks.find(t => t.id === taskId);
-    if (task) {
-        task.completed = !task.completed;
-        saveTasksToStorage();
-        applyAllFilters();
-    }
-}
 }
