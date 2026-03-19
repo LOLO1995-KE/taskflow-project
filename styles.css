@@ -405,3 +405,84 @@ body.dark-mode .status-filter.active {
 .extra-btn:last-child {
     margin-bottom: 0;
 }
+/* ============================================
+   MODO OSCURO - ESTILOS
+   ============================================ */
+
+/* Cuando el HTML tiene la clase dark */
+html.dark body {
+    background-color: #1a1a1a;
+}
+
+html.dark .container {
+    background-color: #2d2d2d;
+}
+
+html.dark .header {
+    background-color: #2a2a2a;
+}
+
+html.dark .sidebar {
+    background-color: #333333;
+    border-right-color: #404040;
+}
+
+html.dark .filter-item,
+html.dark .category-item {
+    color: #e0e0e0;
+}
+
+html.dark .filter-item:hover,
+html.dark .category-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark .filter-item.active {
+    background-color: var(--royal-blue);
+    color: white;
+}
+
+html.dark .tasks-section {
+    background-color: #2d2d2d;
+}
+
+html.dark .task-card {
+    background-color: #3d3d3d;
+    border-color: #404040;
+}
+
+html.dark .task-title {
+    color: #ffffff;
+}
+
+html.dark .task-category {
+    background-color: #404040;
+    color: #cccccc;
+}
+
+html.dark .search-box {
+    background-color: #3d3d3d;
+    border-color: #404040;
+    color: #ffffff;
+}
+
+html.dark .extra-btn {
+    color: #e0e0e0;
+}
+
+html.dark .extra-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark .extra-btn:active {
+    background-color: var(--royal-blue);
+    color: white;
+}
+/* ============================================
+   PRUEBA MODO OSCURO
+   ============================================ */
+
+/* PRUEBA - Cambiar fondo a rojo cuando dark está activado */
+html.dark body {
+    background-color: red !important;
+}

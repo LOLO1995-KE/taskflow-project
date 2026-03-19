@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskFlow - Gestor de Tareas</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -42,6 +48,8 @@
     <div class="extra-buttons">
         <button id="mark-all-btn" class="extra-btn">✅ Marcar todas como completadas</button>
         <button id="clear-completed-btn" class="extra-btn">🗑️ Borrar completadas</button>
+        <div class="extra-buttons">
+        <button id="dark-mode-toggle" class="extra-btn">🌙 Modo oscuro</button>
     </div>
 </aside>
 

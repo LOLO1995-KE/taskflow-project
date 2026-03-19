@@ -216,6 +216,31 @@ function addEditListeners() {
 }
 
 // ============================================
+// MODO OSCURO - SECCIÓN NUEVA
+// ============================================
+
+// Cargar preferencia de modo oscuro al iniciar
+function loadDarkModePreference() {
+    const darkMode = localStorage.getItem('darkMode') === 'true';
+    if (darkMode) {
+        document.documentElement.classList.add('dark');
+    }
+}
+
+// Alternar modo oscuro
+function toggleDarkMode() {
+    document.documentElement.classList.toggle('dark');
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    localStorage.setItem('darkMode', isDarkMode);
+    
+    // Cambiar texto del botón
+    const darkModeBtn = document.getElementById('dark-mode-toggle');
+    if (darkModeBtn) {
+        darkModeBtn.textContent = isDarkMode ? '☀️ Modo claro' : '🌙 Modo oscuro';
+    }
+}
+
+// ============================================
 // FILTROS POR CATEGORÍA
 // ============================================
 
