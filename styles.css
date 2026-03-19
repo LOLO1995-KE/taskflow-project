@@ -476,7 +476,11 @@ body.dark-mode .task-category {
 body.dark-mode .category-item {
     color: #ffffff !important;
 }
-
+/* Encabezados en modo oscuro */
+body.dark-mode .sidebar h3,
+body.dark-mode .tasks-section h2 {
+    color: #e0e0e0; /* Gris claro */
+}
 /* ============================================
    MEDIA QUERY MÓVIL
    ============================================ */

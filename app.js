@@ -176,13 +176,18 @@ function toggleTaskCompletion(taskId) {
     }
 }
 
-// ← AÑADIDO: Función para marcar tarea como completada con el botón verde
+// ← AÑADIDO: Función para marcar tarea como completada con el botón verde (MODIFICADA CON LOGS)
 function completeTask(taskId) {
+    console.log('📝 Ejecutando completeTask para:', taskId);
     const task = tasks.find(t => t.id === taskId);
     if (task) {
+        console.log('✅ Tarea encontrada, estado actual:', task.completed);
         task.completed = true;
+        console.log('✅ Nuevo estado:', task.completed);
         saveTasksToStorage();
         applyAllFilters();
+    } else {
+        console.log('❌ Tarea no encontrada:', taskId);
     }
 }
 
@@ -249,16 +254,26 @@ function addEditListeners() {
     });
 }
 
-// ← AÑADIDO: Listeners para botones de completada
+// ← AÑADIDO: Listeners para botones de completada (MODIFICADO CON LOGS Y MANEJADOR)
 function addCompleteListeners() {
+    console.log('🔍 Buscando botones completada...');
     const completeButtons = document.querySelectorAll('.complete-btn');
+    console.log('✅ Botones encontrados:', completeButtons.length);
+    
     completeButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const taskId = button.dataset.id;
-            completeTask(taskId);
-        });
+        // Eliminar listeners anteriores para evitar duplicados
+        button.removeEventListener('click', handleCompleteClick);
+        button.addEventListener('click', handleCompleteClick);
+        console.log('🎯 Listener añadido a botón:', button.dataset.id);
     });
+}
+
+// Manejador separado para el clic
+function handleCompleteClick(e) {
+    e.stopPropagation();
+    const taskId = this.dataset.id;
+    console.log('🟢 Botón Completada clickeado - Tarea:', taskId);
+    completeTask(taskId);
 }
 
 // ============================================
@@ -350,7 +365,7 @@ function setupMainFilters() {
 // 11.5 CONFIGURAR FILTROS DE ESTADO (TODAS/PENDIENTES/COMPLETADAS)
 function setupStatusFilters() {
     // Seleccionar todos los botones de estado
-    const statusButtons = document.querySelectorAll('.status-filter');
+    const statusButtons = document.querySelectorAll('.status-option');
     
     // Añadir evento click a cada botón
     statusButtons.forEach(button => {
