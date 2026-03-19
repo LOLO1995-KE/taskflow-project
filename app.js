@@ -39,7 +39,7 @@ function renderTasks() {
     addEditListeners();
 }
 
-// 6. CREAR TARJETA DE TAREA (FUNCIÓN AUXILIAR)
+// 6. CREAR TARJETA DE TAREA 
 function createTaskCard(task) {
     const taskCard = document.createElement('div');
     taskCard.className = 'task-card';
@@ -75,7 +75,10 @@ function createTaskCard(task) {
                 };">
                     ${task.priority === 'high' ? 'Alta' : task.priority === 'medium' ? 'Media' : 'Baja'}
                 </span>
-                <!-- 👇 BOTÓN DE EDITAR -->
+                <!-- 👇 BOTÓN COMPLETADA AÑADIDO -->
+                <button class="complete-btn" data-id="${task.id}" style="background: transparent; border: 1px solid #27ae60; color: #27ae60; padding: 4px 10px; border-radius: 6px; cursor: pointer; margin-right: 5px;">
+                    ✅ Completada
+                </button>
                 <button class="edit-btn" data-id="${task.id}" style="background: transparent; border: 1px solid #408EC6; color: #408EC6; padding: 4px 10px; border-radius: 6px; cursor: pointer; margin-right: 5px;">
                     ✏️ Editar
                 </button>
@@ -86,7 +89,18 @@ function createTaskCard(task) {
         </div>
     `;
     
-    return taskCard;
+
+    
+    // Event listener para el checkbox
+    const checkbox = taskCard.querySelector('.task-checkbox');
+    if (checkbox) {
+        checkbox.addEventListener('change', function(e) {
+            e.stopPropagation();
+            const taskId = this.dataset.id;
+            toggleTaskCompletion(taskId);
+        });
+    }
+    
 }
 
 // 7. AÑADIR NUEVA TAREA
@@ -153,7 +167,17 @@ function editTask(taskId) {
     }
 }
 
-// 8.6 MARCAR TODAS LAS TAREAS COMO COMPLETADAS
+// 8.6 FUNCIÓN PARA MARCAR/DESMARCAR TAREAS COMPLETADAS
+function toggleTaskCompletion(taskId) {
+    const task = tasks.find(t => t.id === taskId);
+    if (task) {
+        task.completed = !task.completed;
+        saveTasksToStorage();
+        applyAllFilters();
+    }
+}
+
+// 8.7 MARCAR TODAS LAS TAREAS COMO COMPLETADAS
 function markAllAsCompleted() {
     if (tasks.length === 0) {
         alert('No hay tareas para marcar');
@@ -171,7 +195,8 @@ function markAllAsCompleted() {
     saveTasksToStorage();
     applyAllFilters();
 }
-// 8.7 BORRAR TAREAS COMPLETADAS
+
+// 8.8 BORRAR TAREAS COMPLETADAS
 function clearCompletedTasks() {
     console.log('Botón borrar clickeado'); // Para depurar
     
@@ -223,14 +248,14 @@ function addEditListeners() {
 function loadDarkModePreference() {
     const darkMode = localStorage.getItem('darkMode') === 'true';
     if (darkMode) {
-        document.documentElement.classList.add('dark');
+        document.body.classList.add('dark-mode');
     }
 }
 
 // Alternar modo oscuro
 function toggleDarkMode() {
-    document.documentElement.classList.toggle('dark');
-    const isDarkMode = document.documentElement.classList.contains('dark');
+    document.body.classList.toggle('dark-mode');
+    const isDarkMode = document.body.classList.contains('dark-mode');
     localStorage.setItem('darkMode', isDarkMode);
     
     // Cambiar texto del botón
@@ -456,20 +481,46 @@ function init() {
     
     // Configurar todos los eventos
     if (taskForm) taskForm.addEventListener('submit', addTask);
-    setupMainFilters();       // Filtros: Todas, Importantes, Hoy
-    setupCategoryFilters();   // Filtros: Trabajo, Personal, etc.
-    setupStatusFilters();     // NUEVO: Filtros: Todas, Pendientes, Completada
-    setupSearchFilter();      // Búsqueda
+    setupMainFilters();
+    setupCategoryFilters();
+    setupStatusFilters();
+    setupSearchFilter();
     
-      // Conectar botón marcar todas
+    // Conectar botón marcar todas
     const markAllBtn = document.getElementById('mark-all-btn');
     if (markAllBtn) {
         markAllBtn.addEventListener('click', markAllAsCompleted);
     }
-      // 👇 AÑADE ESTAS LÍNEAS PARA CONECTAR BORRAR COMPLETADAS
+    
+    // CONECTAR BORRAR COMPLETADAS
     const clearCompletedBtn = document.getElementById('clear-completed-btn');
     if (clearCompletedBtn) {
         clearCompletedBtn.addEventListener('click', clearCompletedTasks);
+    }
+    
+    // LÍNEAS PARA MODO OSCURO
+    loadDarkModePreference();
+    
+    const darkModeBtn = document.getElementById('dark-mode-toggle');
+    if (darkModeBtn) {
+        darkModeBtn.addEventListener('click', toggleDarkMode);
+    }
+    
+    // 👇 AÑADE ESTAS LÍNEAS PARA CREAR UNA TAREA DE PRUEBA
+    if (tasks.length === 0) {
+        const tareaPrueba = {
+            id: Date.now().toString(),
+            text: "Tarea de prueba",
+            category: "Trabajo",
+            priority: "high",
+            completed: false,
+            favorite: false,
+            createdAt: new Date().toISOString()
+        };
+        tasks.push(tareaPrueba);
+        saveTasksToStorage();
+        renderTasks();
+        console.log("✅ Tarea de prueba creada");
     }
 }
 
