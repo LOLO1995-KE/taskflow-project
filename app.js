@@ -14,6 +14,7 @@ let tasks = [];
 let selectedCategory = null;      // Para filtro de categoría
 let currentFilter = 'all';         // Para filtros principales: 'all', 'favorites', 'today'
 let statusFilter = 'all';          // NUEVO: 'all', 'pending', 'completed'
+let sortBy = 'default';            // Ordenación: 'default', 'high-to-low', 'low-to-high'
 
 // 3. CARGAR TAREAS DE LocalStorage
 function loadTasksFromStorage() {
@@ -346,6 +347,30 @@ function filterBySearch(tasksList) {
     return tasksList;
 }
 
+// ============================================
+// ORDENAR TAREAS POR PRIORIDAD
+// ============================================
+function sortTasksByPriority(tasksList, order) {
+    const rank = {
+        high: 3,
+        medium: 2,
+        low: 1
+    };
+
+    // Creamos una copia para no mutar el array original.
+    const sorted = [...tasksList];
+
+    if (order === 'low-to-high') {
+        // Baja -> alta
+        sorted.sort((a, b) => (rank[a.priority] ?? 0) - (rank[b.priority] ?? 0));
+    } else {
+        // Alta -> baja (default si viene un valor inesperado)
+        sorted.sort((a, b) => (rank[b.priority] ?? 0) - (rank[a.priority] ?? 0));
+    }
+
+    return sorted;
+}
+
 // 13. APLICAR TODOS LOS FILTROS
 function applyAllFilters() {
     let tasksToShow = [...tasks];
@@ -353,6 +378,11 @@ function applyAllFilters() {
     tasksToShow = filterByCategory(tasksToShow);
     tasksToShow = filterByStatus(tasksToShow);
     tasksToShow = filterBySearch(tasksToShow);
+
+    if (sortBy !== 'default') {
+        tasksToShow = sortTasksByPriority(tasksToShow, sortBy);
+    }
+
     renderFilteredTasks(tasksToShow);
 }
 
@@ -404,6 +434,15 @@ function init() {
     setupCategoryFilters();
     setupStatusFilters();
     setupSearchFilter();
+
+    const sortPrioritySelect = document.getElementById('sort-priority');
+    if (sortPrioritySelect) {
+        sortPrioritySelect.addEventListener('change', (e) => {
+            sortBy = e.target.value;
+            applyAllFilters();
+        });
+    }
+
     const markAllBtn = document.getElementById('mark-all-btn');
     if (markAllBtn) markAllBtn.addEventListener('click', markAllAsCompleted);
     const clearCompletedBtn = document.getElementById('clear-completed-btn');

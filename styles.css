@@ -64,7 +64,11 @@ body {
     box-shadow: var(--box-shadow);
     overflow: hidden;
 }
-
+@media (max-width: 768px) {
+    .container {
+        margin-top: 1rem; 
+    }
+}
 /* Para pantallas muy grandes */
 @media screen and (min-width: 1600px) {
     .container {
@@ -237,7 +241,7 @@ body {
     font-size: 1rem;
 }
 
-#category-select, #priority-select {
+#category-select, #priority-select, #sort-priority {
     flex: 1;
     min-width: 120px;
     padding: var(--spacing-sm);
@@ -246,6 +250,12 @@ body {
     font-family: inherit;
     background-color: white;
     cursor: pointer;
+}
+
+/* El selector de orden vive fuera del formulario, así que ajustamos su espaciado */
+#sort-priority {
+    width: 100%;
+    margin: var(--spacing-md) 0 var(--spacing-lg);
 }
 
 .btn-primary {
