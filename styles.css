@@ -116,6 +116,55 @@ body {
     margin-bottom: var(--spacing-xl);
 }
 
+.progress-container {
+    margin-top: 20px;
+    margin-bottom: var(--spacing-xl);
+}
+
+.progress-label {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.progress-circle {
+    position: relative;
+    width: 92px;
+    height: 92px;
+    margin: 0 auto;
+}
+
+.progress-svg {
+    position: absolute;
+    inset: 0;
+    transform: rotate(-90deg);
+}
+
+.progress-ring-bg {
+    stroke: #e0e0e0;
+    stroke-width: 10;
+    fill: none;
+}
+
+.progress-ring {
+    stroke: var(--accent-color);
+    stroke-width: 10;
+    fill: none;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.3s ease;
+}
+
+.progress-circle-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
 .filter-item, .category-item {
     padding: var(--spacing-sm) var(--spacing-md);
     margin-bottom: var(--spacing-xs);
@@ -402,6 +451,15 @@ body.dark-mode .category-item:hover {
 body.dark-mode .filter-item.active {
     background-color: var(--royal-blue);
     color: white;
+}
+
+/* Ajustes progreso en modo oscuro */
+body.dark-mode .progress-ring-bg {
+    stroke: #3a3a3a;
+}
+
+body.dark-mode .progress-circle-text {
+    color: #e0e0e0;
 }
 
 body.dark-mode .tasks-section {

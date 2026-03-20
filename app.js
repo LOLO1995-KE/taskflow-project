@@ -8,13 +8,15 @@ const taskInput = document.getElementById('task-input');
 const categorySelect = document.getElementById('category-select');
 const prioritySelect = document.getElementById('priority-select');
 const tasksContainer = document.getElementById('tasks-list');
+const progressRing = document.getElementById('progress-ring');
+const progressPercent = document.getElementById('progress-percent');
 
 // 2. ARRAY DE TAREAS Y VARIABLES DE ESTADO
 let tasks = [];
 let selectedCategory = null;      // Para filtro de categoría
 let currentFilter = 'all';         // Para filtros principales: 'all', 'favorites', 'today'
 let statusFilter = 'all';          // NUEVO: 'all', 'pending', 'completed'
-let sortBy = 'default';            // Ordenación: 'default', 'high-to-low', 'low-to-high'
+let sortOption = 'default';        // Ordenación: 'default', 'high-to-low', 'low-to-high', 'newest', 'oldest'
 
 // 3. CARGAR TAREAS DE LocalStorage
 function loadTasksFromStorage() {
@@ -25,6 +27,125 @@ function loadTasksFromStorage() {
 // 4. GUARDAR TAREAS EN LocalStorage
 function saveTasksToStorage() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+// ============================================
+// PROGRESO (porcentaje completadas)
+// ============================================
+function updateProgress() {
+    const total = tasks.length;
+    const completedCount = tasks.filter(task => task.completed === true).length;
+    const percent = total === 0 ? 0 : Math.round((completedCount / total) * 100);
+
+    if (progressPercent) progressPercent.textContent = `${percent}%`;
+
+    if (progressRing) {
+        const r = parseFloat(progressRing.getAttribute('r')) || 45;
+        const circumference = 2 * Math.PI * r;
+        const offset = circumference * (1 - percent / 100);
+
+        // Inicializamos la animacion del stroke si aun no esta calculada.
+        progressRing.style.strokeDasharray = `${circumference}`;
+        progressRing.style.strokeDashoffset = `${offset}`;
+    }
+}
+
+// ============================================
+// EXPORTAR / IMPORTAR TAREAS (JSON)
+// ============================================
+function exportTasks() {
+    try {
+        const json = JSON.stringify(tasks, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'taskflow-backup.json';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        // Liberamos el objeto URL después de disparar la descarga.
+        setTimeout(() => URL.revokeObjectURL(url), 0);
+    } catch (err) {
+        console.error('Error exportando tareas:', err);
+        alert('No se pudieron exportar las tareas.');
+    }
+}
+
+function importTasks() {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.json,application/json';
+    fileInput.style.display = 'none';
+
+    fileInput.addEventListener('change', () => {
+        const file = fileInput.files && fileInput.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            let parsed;
+            try {
+                parsed = JSON.parse(reader.result);
+            } catch (err) {
+                alert('El archivo no contiene JSON válido.');
+                return;
+            }
+
+            if (!Array.isArray(parsed)) {
+                alert('El JSON importado debe ser un array de tareas.');
+                return;
+            }
+
+            const importedTasks = [];
+
+            for (const [index, item] of parsed.entries()) {
+                const isObject = item && typeof item === 'object';
+                const idOk = isObject && (typeof item.id === 'string' || typeof item.id === 'number');
+                const textOk = isObject && (typeof item.text === 'string' || typeof item.text === 'number');
+                const completedOk = isObject && (typeof item.completed === 'boolean' || typeof item.completed === 'string' || typeof item.completed === 'number');
+
+                if (!isObject || !idOk || !textOk || !completedOk) {
+                    alert(`Formato inválido en la tarea #${index + 1}. Se requiere al menos {id, text, completed}.`);
+                    return;
+                }
+
+                const completed = (item.completed === true || item.completed === 'true' || item.completed === 1);
+
+                const priority = (item.priority === 'high' || item.priority === 'medium' || item.priority === 'low')
+                    ? item.priority
+                    : 'medium';
+
+                importedTasks.push({
+                    id: String(item.id),
+                    text: String(item.text),
+                    category: typeof item.category === 'string' ? item.category : 'Trabajo',
+                    priority,
+                    completed,
+                    favorite: Boolean(item.favorite),
+                    createdAt: typeof item.createdAt === 'string' ? item.createdAt : new Date().toISOString()
+                });
+            }
+
+            tasks = importedTasks;
+            saveTasksToStorage();
+            applyAllFilters();
+        };
+
+        reader.readAsText(file);
+
+        // Permitimos volver a seleccionar el mismo archivo si hiciera falta.
+        fileInput.value = '';
+    });
+
+    document.body.appendChild(fileInput);
+    fileInput.click();
+
+    fileInput.addEventListener('change', () => {
+        fileInput.remove();
+    }, { once: true });
 }
 
 // 5. RENDERIZAR TAREAS (VERSIÓN CORREGIDA)
@@ -371,6 +492,29 @@ function sortTasksByPriority(tasksList, order) {
     return sorted;
 }
 
+// ============================================
+// ORDENAR TAREAS POR FECHA DE CREACIÓN
+// ============================================
+function sortTasksByDate(tasksList, order) {
+    // Creamos una copia para no mutar el array original.
+    const sorted = [...tasksList];
+
+    const toTime = (task) => {
+        const t = task.createdAt ? new Date(task.createdAt).getTime() : NaN;
+        return Number.isFinite(t) ? t : 0;
+    };
+
+    if (order === 'oldest') {
+        // Más antiguo primero
+        sorted.sort((a, b) => toTime(a) - toTime(b));
+    } else {
+        // Más reciente primero (default si viene un valor inesperado)
+        sorted.sort((a, b) => toTime(b) - toTime(a));
+    }
+
+    return sorted;
+}
+
 // 13. APLICAR TODOS LOS FILTROS
 function applyAllFilters() {
     let tasksToShow = [...tasks];
@@ -379,10 +523,16 @@ function applyAllFilters() {
     tasksToShow = filterByStatus(tasksToShow);
     tasksToShow = filterBySearch(tasksToShow);
 
-    if (sortBy !== 'default') {
-        tasksToShow = sortTasksByPriority(tasksToShow, sortBy);
+    // Ordenación: prioridad primero, luego fecha (según la opción seleccionada).
+    if (sortOption === 'high-to-low' || sortOption === 'low-to-high') {
+        tasksToShow = sortTasksByPriority(tasksToShow, sortOption);
+    }
+    if (sortOption === 'newest' || sortOption === 'oldest') {
+        tasksToShow = sortTasksByDate(tasksToShow, sortOption);
     }
 
+    // El progreso se calcula sobre el total de tareas (no sobre el conjunto filtrado).
+    updateProgress();
     renderFilteredTasks(tasksToShow);
 }
 
@@ -429,6 +579,7 @@ function resetFilters() {
 function init() {
     loadTasksFromStorage();
     renderTasks();
+    updateProgress();
     if (taskForm) taskForm.addEventListener('submit', addTask);
     setupMainFilters();
     setupCategoryFilters();
@@ -438,7 +589,7 @@ function init() {
     const sortPrioritySelect = document.getElementById('sort-priority');
     if (sortPrioritySelect) {
         sortPrioritySelect.addEventListener('change', (e) => {
-            sortBy = e.target.value;
+            sortOption = e.target.value;
             applyAllFilters();
         });
     }
@@ -447,6 +598,13 @@ function init() {
     if (markAllBtn) markAllBtn.addEventListener('click', markAllAsCompleted);
     const clearCompletedBtn = document.getElementById('clear-completed-btn');
     if (clearCompletedBtn) clearCompletedBtn.addEventListener('click', clearCompletedTasks);
+
+    const exportBtn = document.getElementById('export-tasks');
+    if (exportBtn) exportBtn.addEventListener('click', exportTasks);
+
+    const importBtn = document.getElementById('import-tasks');
+    if (importBtn) importBtn.addEventListener('click', importTasks);
+
     loadDarkModePreference();
     const darkModeBtn = document.getElementById('dark-mode-toggle');
     if (darkModeBtn) darkModeBtn.addEventListener('click', toggleDarkMode);
