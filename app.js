@@ -75,9 +75,7 @@ function createTaskCard(task) {
                 };">
                     ${task.priority === 'high' ? 'Alta' : task.priority === 'medium' ? 'Media' : 'Baja'}
                 </span>
-                <!-- ← AÑADIDO: Botón Completada -->
-                <button class="complete-btn" data-id="${task.id}" style="background: transparent; border: 1px solid #27ae60; color: #27ae60; padding: 4px 10px; border-radius: 6px; cursor: pointer; margin-right: 5px;">
-                    ✅ Completada
+                
                 </button>
                 <button class="edit-btn" data-id="${task.id}" style="background: transparent; border: 1px solid #408EC6; color: #408EC6; padding: 4px 10px; border-radius: 6px; cursor: pointer; margin-right: 5px;">
                     ✏️ Editar
