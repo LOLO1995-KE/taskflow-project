@@ -1,0 +1,373 @@
+/* =========================================================
+   TaskFlow Redesign (Apple/Sony/Affinity inspired)
+   - Only styles (no JS logic touched)
+   - Loaded after `styles.css` to override safely
+   - Revert by removing the extra <link> in index.html
+   ========================================================= */
+
+:root {
+    /* Fonts */
+    --font-sans: "Affinity Serif Variable", "Canva Sans", "Noto Sans Variable", "Noto Sans",
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+
+    /* Palette */
+    --tf-bg: #f7f7f8;             /* almost-white */
+    --tf-surface: #ffffff;       /* panels */
+    --tf-surface-2: #fbfbfc;     /* sidebar / subtle panels */
+    --tf-border: rgba(20, 20, 25, 0.10);
+    --tf-border-strong: rgba(20, 20, 25, 0.16);
+    --tf-text: #111318;
+    --tf-muted: rgba(17, 19, 24, 0.68);
+
+    --tf-accent: #2f6fed;        /* elegant blue */
+    --tf-accent-2: #1f57d6;
+
+    /* Priority colors (keep existing semantic feel) */
+    --priority-high: #A1355B;
+    --priority-medium: #B58B7C;
+    --priority-low: #7C9EB2;
+
+    /* Shapes & shadows */
+    --tf-radius-lg: 16px;
+    --tf-radius-md: 12px;
+    --tf-shadow-sm: 0 1px 0 rgba(0, 0, 0, 0.02), 0 6px 18px rgba(15, 23, 42, 0.06);
+    --tf-shadow-md: 0 2px 0 rgba(0, 0, 0, 0.02), 0 10px 30px rgba(15, 23, 42, 0.10);
+
+    /* Reuse variable names from styles.css where possible */
+    --primary-color: var(--tf-accent);
+    --secondary-color: var(--tf-accent-2);
+    --accent-color: var(--tf-accent);
+    --background-color: var(--tf-bg);
+    --card-background: var(--tf-surface);
+    --text-primary: var(--tf-text);
+    --text-secondary: var(--tf-muted);
+
+    --box-shadow: var(--tf-shadow-sm);
+    --box-shadow-hover: var(--tf-shadow-md);
+    --border-radius: var(--tf-radius-md);
+    --transition-speed: 0.22s;
+
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 0.9rem;
+    --spacing-lg: 1.4rem;
+    --spacing-xl: 2.1rem;
+}
+
+/* Base */
+body {
+    font-family: var(--font-sans);
+    background-color: var(--tf-bg);
+    color: var(--tf-text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+    background-color: var(--tf-surface);
+    border-radius: var(--tf-radius-lg);
+    box-shadow: var(--tf-shadow-sm);
+    overflow: hidden;
+}
+
+.header {
+    /* subtle, not loud */
+    background: linear-gradient(180deg, rgba(47, 111, 237, 1) 0%, rgba(31, 87, 214, 1) 100%);
+    color: #fff;
+    padding: var(--spacing-xl);
+    text-align: center;
+}
+
+.main-content {
+    min-height: 600px;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 265px;
+    background-color: var(--tf-surface-2);
+    border-right: 1px solid var(--tf-border);
+    padding: var(--spacing-lg);
+}
+
+.sidebar h3 {
+    margin-bottom: var(--spacing-md);
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
+    text-transform: none;
+    color: var(--tf-muted);
+}
+
+/* Lists */
+.filters,
+.categories {
+    list-style: none;
+    margin: 0 0 var(--spacing-xl) 0;
+    padding: 0;
+}
+
+.filter-item,
+.category-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background-color var(--transition-speed) ease,
+        border-color var(--transition-speed) ease,
+        transform var(--transition-speed) ease,
+        box-shadow var(--transition-speed) ease;
+}
+
+.filter-item:hover,
+.category-item:hover {
+    background-color: rgba(47, 111, 237, 0.06);
+    border-color: rgba(47, 111, 237, 0.18);
+}
+
+.filter-item.active {
+    background-color: var(--tf-accent);
+    border-color: rgba(47, 111, 237, 0.65);
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Sort dropdown: matches inputs style */
+#sort-priority,
+#category-select,
+#priority-select {
+    border: 1px solid rgba(20, 20, 25, 0.14);
+    border-radius: 12px;
+    padding: 10px 12px;
+    background-color: #fff;
+    color: var(--tf-text);
+    transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease,
+        background-color var(--transition-speed) ease;
+}
+
+#sort-priority {
+    width: 100%;
+    margin: 14px 0 22px 0;
+}
+
+#sort-priority:focus,
+#category-select:focus,
+#priority-select:focus,
+#task-input:focus,
+.search-box:focus {
+    outline: none;
+    border-color: rgba(47, 111, 237, 0.6);
+    box-shadow: 0 0 0 4px rgba(47, 111, 237, 0.12);
+}
+
+/* Form and inputs */
+.task-form {
+    background-color: rgba(255, 255, 255, 0.86);
+    border: 1px solid var(--tf-border);
+    border-radius: var(--tf-radius-lg);
+}
+
+#task-input,
+.search-box {
+    border: 1px solid rgba(20, 20, 25, 0.14);
+    border-radius: 12px;
+}
+
+/* Buttons: outlined default, color on hover/active */
+.extra-btn,
+.delete-btn,
+.edit-btn {
+    border: 1px solid rgba(20, 20, 25, 0.16);
+    background-color: transparent;
+    color: var(--tf-text);
+    padding: 10px 12px;
+    border-radius: 12px;
+    transition: background-color var(--transition-speed) ease,
+        border-color var(--transition-speed) ease,
+        color var(--transition-speed) ease,
+        transform var(--transition-speed) ease;
+}
+
+.extra-btn {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.extra-btn:hover,
+.delete-btn:hover,
+.edit-btn:hover {
+    background-color: rgba(47, 111, 237, 0.08);
+    border-color: rgba(47, 111, 237, 0.32);
+    color: var(--tf-accent);
+}
+
+.extra-btn:active,
+.delete-btn:active,
+.edit-btn:active {
+    background-color: rgba(47, 111, 237, 0.14);
+    border-color: rgba(47, 111, 237, 0.45);
+}
+
+.btn-primary {
+    border: 1px solid rgba(47, 111, 237, 0.45);
+    background: transparent;
+    color: var(--tf-accent);
+    border-radius: 12px;
+    transition: background-color var(--transition-speed) ease,
+        border-color var(--transition-speed) ease,
+        color var(--transition-speed) ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--tf-accent);
+    border-color: rgba(47, 111, 237, 0.7);
+    color: #fff;
+}
+
+/* Cards */
+.task-card {
+    background-color: var(--tf-surface);
+    border: 1px solid var(--tf-border);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
+    transition: box-shadow var(--transition-speed) ease,
+        border-color var(--transition-speed) ease,
+        transform var(--transition-speed) ease,
+        background-color var(--transition-speed) ease;
+}
+
+.task-card:hover {
+    border-color: rgba(47, 111, 237, 0.35);
+    box-shadow: var(--tf-shadow-sm);
+    transform: translateY(-1px);
+}
+
+.task-title {
+    color: var(--tf-text);
+}
+
+.task-category {
+    background-color: rgba(47, 111, 237, 0.08);
+    color: rgba(17, 19, 24, 0.72);
+    border: 1px solid rgba(47, 111, 237, 0.18);
+}
+
+/* Progress ring: smoother + consistent color */
+.progress-ring-bg {
+    stroke: rgba(20, 20, 25, 0.12);
+}
+
+.progress-ring {
+    transition: stroke-dashoffset var(--transition-speed) ease;
+}
+
+/* Dark mode */
+body.dark-mode {
+    background-color: #0f1115;
+    color: #e8eaf0;
+}
+
+body.dark-mode .container {
+    background-color: #14171d;
+    border-radius: var(--tf-radius-lg);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02), 0 12px 35px rgba(0, 0, 0, 0.35);
+}
+
+body.dark-mode .header {
+    background: linear-gradient(180deg, rgba(47, 111, 237, 1) 0%, rgba(31, 87, 214, 1) 100%);
+}
+
+body.dark-mode .sidebar {
+    background-color: #12151b;
+    border-right-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .sidebar h3 {
+    color: rgba(232, 234, 240, 0.65);
+}
+
+body.dark-mode .filter-item,
+body.dark-mode .category-item {
+    border-color: transparent;
+}
+
+body.dark-mode .filter-item:hover,
+body.dark-mode .category-item:hover {
+    background-color: rgba(47, 111, 237, 0.10);
+    border-color: rgba(47, 111, 237, 0.25);
+}
+
+body.dark-mode .filter-item.active {
+    color: #fff;
+}
+
+body.dark-mode #sort-priority,
+body.dark-mode #category-select,
+body.dark-mode #priority-select,
+body.dark-mode #task-input,
+body.dark-mode .search-box {
+    background-color: #0f1218;
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #e8eaf0;
+}
+
+body.dark-mode .task-form {
+    background-color: rgba(20, 23, 29, 0.65);
+    border-color: rgba(255, 255, 255, 0.10);
+}
+
+body.dark-mode .extra-btn,
+body.dark-mode .delete-btn,
+body.dark-mode .edit-btn {
+    border-color: rgba(255, 255, 255, 0.14);
+    color: rgba(232, 234, 240, 0.92);
+}
+
+body.dark-mode .extra-btn:hover,
+body.dark-mode .delete-btn:hover,
+body.dark-mode .edit-btn:hover {
+    color: #8fb6ff;
+    background-color: rgba(47, 111, 237, 0.14);
+    border-color: rgba(47, 111, 237, 0.35);
+}
+
+body.dark-mode .btn-primary {
+    border-color: rgba(47, 111, 237, 0.55);
+    color: #8fb6ff;
+}
+
+body.dark-mode .btn-primary:hover {
+    background-color: var(--tf-accent);
+    border-color: rgba(47, 111, 237, 0.7);
+    color: #fff;
+}
+
+body.dark-mode .task-card {
+    background-color: #14171d;
+    border-color: rgba(255, 255, 255, 0.10);
+    box-shadow: none;
+}
+
+body.dark-mode .task-card:hover {
+    border-color: rgba(47, 111, 237, 0.35);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+body.dark-mode .task-category {
+    background-color: rgba(47, 111, 237, 0.10);
+    color: rgba(232, 234, 240, 0.78);
+    border-color: rgba(47, 111, 237, 0.20);
+}
+
+body.dark-mode .progress-circle-text {
+    color: #e8eaf0;
+}
+
+body.dark-mode .progress-ring-bg {
+    stroke: rgba(255, 255, 255, 0.12);
+}
+
